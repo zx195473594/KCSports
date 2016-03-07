@@ -54,17 +54,18 @@
 - (void)_initTextFieldAndButton
 {
     // 输入框
-    _txField = [[UITextField alloc] initWithFrame:CGRectMake(50, 50, 150, 30)];
+    _txField = [[UITextField alloc] initWithFrame:CGRectMake(0.12 * ScreenWidth, 0.12 * ScreenWidth, 0.4 * ScreenWidth, 0.1*ScreenWidth)];
     _txField.borderStyle = UITextBorderStyleRoundedRect;
     _txField.placeholder = @"请输入采样距离";
     _txField.backgroundColor = [UIColor whiteColor];
     _txField.keyboardType = UIKeyboardTypeNumberPad;
+    [_txField sizeToFit];
     [self.view addSubview:_txField];
     
     // 定位开始按钮
     UIButton *locateButton = [UIButton buttonWithType:UIButtonTypeSystem];
     locateButton.backgroundColor = [UIColor whiteColor];
-    locateButton.frame = CGRectMake(250, 50, 80, 30);
+    locateButton.frame = CGRectMake(0.65 * ScreenWidth, 50, 80, 30);
     [locateButton setTitle:@"开始定位" forState:UIControlStateNormal];
     [locateButton addTarget:self action:@selector(startLocating:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -89,29 +90,18 @@
 
 - (void)_drawLines
 {
-    NSInteger count = _arrayLocations.count;
-    CLLocationCoordinate2D coordinates[count];
     
-    for (int i = 0; i < count; i ++) {
-        MAUserLocation *location = _arrayLocations[i];
-        coordinates[i].latitude = location.coordinate.latitude;
-        
-        coordinates[i].longitude = location.coordinate.longitude;
-        NSLog(@"%f,%f",coordinates[i].latitude,coordinates[i].longitude);
-        
-    }
-//    coordinates[0].latitude = 39.781892;
-//    coordinates[0].longitude = 116.293413;
-//    
-//    coordinates[1].latitude = 39.787600;
-//    coordinates[1].longitude = 116.391842;
-//    
-//    coordinates[2].latitude = 39.733187;
-//    coordinates[2].longitude = 116.417932;
-//    
-//    coordinates[3].latitude = 39.704653;
-//    coordinates[3].longitude = 116.338255;
-    MAPolyline *polyline = [MAPolyline polylineWithCoordinates:coordinates count:count];
+//    NSLog(@"lastLA = %f, lastLO = %f, newLA = %f, newLO = %f",_lastLocationPoint.coordinate.latitude,_lastLocationPoint.coordinate.longitude,_newLocationPoint.coordinate.latitude,_newLocationPoint.coordinate.longitude);
+    
+    CLLocationCoordinate2D coordinates[2];
+    
+    coordinates[0].latitude = _lastLocationPoint.coordinate.latitude;
+    coordinates[0].longitude = _lastLocationPoint.coordinate.longitude;
+    
+    coordinates[1].latitude = _newLocationPoint.coordinate.latitude;
+    coordinates[1].longitude = _newLocationPoint.coordinate.longitude;
+    
+    MAPolyline *polyline = [MAPolyline polylineWithCoordinates:coordinates count:2];
 
     [_mapView addOverlay:polyline];
     
@@ -120,25 +110,32 @@
 -(void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation
 updatingLocation:(BOOL)updatingLocation
 {
-    if(updatingLocation)
+    
+    NSLog(@"%@",userLocation.location);
+    NSLog(@"%@",_lastLocationPoint);
+        if(updatingLocation)
     {
-        //取出当前位置的坐标
-//        NSLog(@"latitude : %f,longitude: %f",userLocation.coordinate.latitude,userLocation.coordinate.longitude);
-        if (_arrayLocations.count < 5) {
-            [_arrayLocations addObject:userLocation];
-        }
-        else
-        {
-            [_arrayLocations removeObjectAtIndex:0];
-            [_arrayLocations addObject:userLocation];
-        }
+        float x = userLocation.coordinate.latitude - _lastLocationPoint.coordinate.latitude;
+        float y = userLocation.coordinate.longitude - _lastLocationPoint.coordinate.longitude;
+
+            // 1.将新获得的坐标赋值给_newLocationPoint
+            _newLocationPoint = [userLocation.location copy];
+            
+            NSLog(@"lastLA = %f, lastLO = %f, newLA = %f, newLO = %f",_lastLocationPoint.coordinate.latitude,_lastLocationPoint.coordinate.longitude,_newLocationPoint.coordinate.latitude,_newLocationPoint.coordinate.longitude);
+            // 2.定位获得坐标后开始画线 (从_lastLocationPoint到_newLocationPoint)
+
+                [self _drawLines];
+            
+            
+            // 3.画线完毕后将_newLocationPoint赋值给_lastLocationPoint
+            
+            _lastLocationPoint = _newLocationPoint;
+
+        
         
     }
-//    NSLog(@"%@",_arrayLocations);
     
-    // 定位获得坐标后开始画线
-    [self _drawLines];
-
+    
 }
 
 - (MAOverlayView *)mapView:(MAMapView *)mapView viewForOverlay:(id <MAOverlay>)overlay
@@ -150,27 +147,18 @@ updatingLocation:(BOOL)updatingLocation
         
         polylineView.lineWidth = 5.f;
         polylineView.strokeColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.6];
-//        polylineView.lineJoinType = kMALineJoinRound;//连接类型
-//        polylineView.lineCapType = kMALineCapRound;//端点类型
-        
+
         return polylineView;
     }
     return nil;
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
