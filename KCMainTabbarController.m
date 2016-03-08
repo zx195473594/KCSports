@@ -70,9 +70,11 @@
     {
         UIButton *buttonIndex = [KCUIFactory createButtonWithImageName:arrayImageNameNormal[i] highlightedImageName:arrayImageNameSelected[i]];
         buttonIndex.tag = i;
-        buttonIndex.frame = CGRectMake( (30 + x) * i + x , (_imageViewTabbarBG.height - 30) / 2 , 30, 30);
+        buttonIndex.frame = CGRectMake( (30 + x) * i + x , (_imageViewTabbarBG.height - 30) / 2 - 10 , 30, 30);
         [buttonIndex addTarget:self action:@selector(selectedIndexChange:) forControlEvents:UIControlEventTouchUpInside];
         [_imageViewTabbarBG addSubview:buttonIndex];
+        
+//        UILabel *labelIndex = [KCUIFactory]
     }
 }
 

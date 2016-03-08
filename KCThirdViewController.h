@@ -24,7 +24,6 @@
     CLLocation *_lastLocationPoint;  // 上一个定位坐标点
     CLLocation *_newLocationPoint;   // 新获得的定位坐标点
     
-    MAUserLocation *save;
     float step;
 }
 
