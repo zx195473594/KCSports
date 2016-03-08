@@ -65,12 +65,12 @@
     // 选定状态图
     NSArray *arrayImageNameSelected  = @[@"tabbar_home_selected",@"tabbar_profile_selected",@"tabbar_message_center_selected",@"tabbar_discover_selected",@"tabbar_more_selected"];
     float x = (ScreenWidth - 5 * 30) / 6;
-    for (int i = 0 ; i < 5; i ++) {
-        UIButton *buttonIndex = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    for (int i = 0 ; i < 5; i ++)
+    {
+        UIButton *buttonIndex = [KCUIFactory createButtonWithImageName:arrayImageNameNormal[i] highlightedImageName:arrayImageNameSelected[i]];
         buttonIndex.tag = i;
-        buttonIndex.frame = CGRectMake( (30 + x) * i + x , (_imageViewTabbarBG.height - 30) / 2 , 30, 30);;
-        [buttonIndex setImage:[UIImage imageNamed:arrayImageNameNormal[i]] forState:UIControlStateNormal];
-        [buttonIndex setImage:[UIImage imageNamed:arrayImageNameSelected[i]] forState:UIControlStateSelected];
+        buttonIndex.frame = CGRectMake( (30 + x) * i + x , (_imageViewTabbarBG.height - 30) / 2 , 30, 30);
         [buttonIndex addTarget:self action:@selector(selectedIndexChange:) forControlEvents:UIControlEventTouchUpInside];
         [_imageViewTabbarBG addSubview:buttonIndex];
     }

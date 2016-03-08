@@ -115,8 +115,8 @@ updatingLocation:(BOOL)updatingLocation
     NSLog(@"%@",_lastLocationPoint);
         if(updatingLocation)
     {
-        float x = userLocation.coordinate.latitude - _lastLocationPoint.coordinate.latitude;
-        float y = userLocation.coordinate.longitude - _lastLocationPoint.coordinate.longitude;
+//        float x = userLocation.coordinate.latitude - _lastLocationPoint.coordinate.latitude;
+//        float y = userLocation.coordinate.longitude - _lastLocationPoint.coordinate.longitude;
 
             // 1.将新获得的坐标赋值给_newLocationPoint
             _newLocationPoint = [userLocation.location copy];

@@ -14,11 +14,16 @@
 
 @implementation KCHomeViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
     self.title = @"1";
+    
     [self loadTitleView];
+    
     [self loadScrollView];
+    
     [self loadTwoViewControllers];
 }
 
@@ -34,21 +39,27 @@
     self.navigationItem.titleView = self.segmentTitleView;
     
     // 加载左右按钮
-    UIButton *buttonLeftItem = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *buttonLeftItem = [KCUIFactory createButtonWithImageName:nil highlightedImageName:nil];
+    buttonLeftItem.tag = 1;
     buttonLeftItem.frame = CGRectMake(0, 0, 30, 30);
     [buttonLeftItem setTitle:@"左1" forState:UIControlStateNormal];
+    [buttonLeftItem addTarget:self action:@selector(barButtonItemActions:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:buttonLeftItem];
     
-    UIButton *buttonRightItem1 = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *buttonRightItem1 = [KCUIFactory createButtonWithImageName:nil highlightedImageName:nil];
+    buttonRightItem1.tag = 2;
     buttonRightItem1.frame = CGRectMake(0, 0, 30, 30);
     [buttonRightItem1 setTitle:@"右1" forState:UIControlStateNormal];
+    [buttonRightItem1 addTarget:self action:@selector(barButtonItemActions:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem1 = [[UIBarButtonItem alloc]initWithCustomView:buttonRightItem1];
 
-    UIButton *buttonRightItem2 = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *buttonRightItem2 = [KCUIFactory createButtonWithImageName:nil highlightedImageName:nil];
+    buttonRightItem2.tag = 3;
     buttonRightItem2.frame = CGRectMake(0, 0, 30, 30);
     [buttonRightItem2 setTitle:@"右2" forState:UIControlStateNormal];
     UIBarButtonItem *rightItem2 = [[UIBarButtonItem alloc]initWithCustomView:buttonRightItem2];
-    
+    [buttonRightItem2 addTarget:self action:@selector(barButtonItemActions:) forControlEvents:UIControlEventTouchUpInside];
+ 
     self.navigationItem.rightBarButtonItems = @[rightItem2,rightItem1];
 
 }
@@ -65,17 +76,10 @@
     
 }
 
-- (void)loadTwoViewControllers
-{
-    _homeFirstVC    = [[KCHomeFirstViewController alloc]init];
-    _homeFirstVC.view.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
-    _homeSecondVC   = [[KCHomeSecondViewController alloc]init];
-    _homeSecondVC.view.frame = CGRectMake(ScreenWidth, 0, ScreenWidth, ScreenHeight);
-    [self.scrollView addSubview:_homeFirstVC.view];
-    [self.scrollView addSubview:_homeSecondVC.view];
-}
+
 
 #pragma mark - UIScrollViewDelegate
+// 滚动视图代理
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (self.scrollView.contentOffset.x >= ScreenWidth / 2)
@@ -102,14 +106,42 @@
     [self.scrollView setContentOffset:CGPointMake(ScreenWidth * segmentControl.selectedSegmentIndex, 0) animated:YES];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+// 点击导航栏item事件
+- (void)barButtonItemActions:(UIButton *)button
+{
+    switch (button.tag)
+    {
+        case 1:
+        {
+            NSLog(@"左1");
+        }
+            break;
+        case 2:
+        {
+            NSLog(@"右1");
+        }
+            break;
+        case 3:
+        {
+            NSLog(@"右2");
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
-*/
+
+// 设置滚动视图控制器
+- (void)loadTwoViewControllers
+{
+    _homeFirstVC    = [[KCHomeFirstViewController alloc]init];
+    _homeFirstVC.view.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+    _homeSecondVC   = [[KCHomeSecondViewController alloc]init];
+    _homeSecondVC.view.frame = CGRectMake(ScreenWidth, 0, ScreenWidth, ScreenHeight);
+    [self.scrollView addSubview:_homeFirstVC.view];
+    [self.scrollView addSubview:_homeSecondVC.view];
+}
 
 @end
