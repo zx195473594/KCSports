@@ -9,7 +9,10 @@
 #import "KCThirdViewController.h"
 
 @interface KCThirdViewController ()
-
+{
+    NSMutableArray * _speedColors;
+    MAMultiPolyline * _polyline;
+}
 @end
 
 @implementation KCThirdViewController
@@ -17,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.title = @"3";
+    self.title = @"5";
     
     [MAMapServices sharedServices].apiKey = @"110b80fe37fa086f33b4a92ae0c78d0e";
     
@@ -45,9 +48,9 @@
     
     // 初始化高德地图
     _mapView = [[MAMapView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, _mapV.height)];
-    _mapView.distanceFilter = 30;
+    _mapView.distanceFilter = 3;
     _mapView.delegate = self;
-    
+    _speedColors = [NSMutableArray array];
     
     [_mapV addSubview:_mapView];
 }
@@ -101,9 +104,9 @@
     coordinates[1].latitude = _newLocationPoint.coordinate.latitude;
     coordinates[1].longitude = _newLocationPoint.coordinate.longitude;
     
-    MAPolyline *polyline = [MAPolyline polylineWithCoordinates:coordinates count:2];
-
-    [_mapView addOverlay:polyline];
+    _polyline = [MAMultiPolyline polylineWithCoordinates:coordinates count:2 drawStyleIndexes:nil];
+    [_speedColors addObject:[UIColor purpleColor]];
+    [_mapView addOverlay:_polyline];
     
 }
 
@@ -123,23 +126,26 @@ updatingLocation:(BOOL)updatingLocation
         }
         
         // 判断与前一个点的坐标差，如果超出范围则不进行操作
-        if ( (fabsf(x) > 0.005) || (fabsf(y) > 0.005))
+        if ( (fabsf(x) > 0.00001) || (fabsf(y) > 0.00001))
         {
-            // 1.将新获得的坐标赋值给_newLocationPoint
-            
-            _newLocationPoint = [userLocation.location copy];
-            
-           
-            NSLog(@"lastLA = %f, lastLO = %f, newLA = %f, newLO = %f",_lastLocationPoint.coordinate.latitude,_lastLocationPoint.coordinate.longitude,_newLocationPoint.coordinate.latitude,_newLocationPoint.coordinate.longitude);
-            // 2.定位获得坐标后开始画线 (从_lastLocationPoint到_newLocationPoint)
-            if (_lastLocationPoint.coordinate.latitude != 0.000000 && _lastLocationPoint.coordinate.longitude != 0.000000)
-            {
-                // 当前一个坐标经纬度不为零时，进行画线
-                [self _drawLines];
-            }
-            // 3.画线完毕后将_newLocationPoint赋值给_lastLocationPoint
-            _lastLocationPoint = _newLocationPoint;
+            if ((fabsf(x) < 0.000012) || (fabsf(y) < 0.000012)) {
+                // 1.将新获得的坐标赋值给_newLocationPoint
+                
+                _newLocationPoint = [userLocation.location copy];
+                
+                
+                NSLog(@"lastLA = %f, lastLO = %f, newLA = %f, newLO = %f",_lastLocationPoint.coordinate.latitude,_lastLocationPoint.coordinate.longitude,_newLocationPoint.coordinate.latitude,_newLocationPoint.coordinate.longitude);
+                // 2.定位获得坐标后开始画线 (从_lastLocationPoint到_newLocationPoint)
+                if (_lastLocationPoint.coordinate.latitude != 0.000000 && _lastLocationPoint.coordinate.longitude != 0.000000)
+                {
+                    // 当前一个坐标经纬度不为零时，进行画线
+                    [self _drawLines];
+                }
+                // 3.画线完毕后将_newLocationPoint赋值给_lastLocationPoint
+                _lastLocationPoint = _newLocationPoint;
 
+            }
+           
         }
     }
 }
@@ -164,17 +170,24 @@ updatingLocation:(BOOL)updatingLocation
 }
 
 
-- (MAOverlayView *)mapView:(MAMapView *)mapView viewForOverlay:(id <MAOverlay>)overlay
+- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id <MAOverlay>)overlay
 {
     [_mapView removeOverlay:overlay];
     if ([overlay isKindOfClass:[MAPolyline class]])
     {
-        MAPolylineView *polylineView = [[MAPolylineView alloc] initWithPolyline:overlay];
+//        MAPolylineView *polylineView = [[MAPolylineView alloc] initWithPolyline:overlay];
+//        
+//        polylineView.lineWidth = 5.f;
+//        polylineView.strokeColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.6];
+//
+//        return polylineView;
+        MAMultiColoredPolylineRenderer * polylineRenderer = [[MAMultiColoredPolylineRenderer alloc] initWithMultiPolyline:overlay];
         
-        polylineView.lineWidth = 5.f;
-        polylineView.strokeColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.6];
-
-        return polylineView;
+        polylineRenderer.lineWidth = 8.f;
+        polylineRenderer.gradient = YES;
+        polylineRenderer.strokeColors = _speedColors;
+        
+        return polylineRenderer;
     }
     return nil;
 }
