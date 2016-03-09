@@ -10,12 +10,22 @@
 
 @implementation KCThemeLabel
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (id)init
+{
+    if (self = [super init])
+    {
+        // 切换主题时使用
+    }
+    return self;
 }
-*/
+
+- (id)initWithColorName:(NSString *)colorName
+{
+    if (self = [self init])
+    {
+        self.colorName = colorName;
+    }
+    return self;
+}
 
 @end

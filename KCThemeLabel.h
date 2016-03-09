@@ -10,6 +10,8 @@
 
 @interface KCThemeLabel : UILabel
 
-@property (nonatomic, copy) NSString *textString;
+@property (nonatomic, copy) NSString *colorName;
+
+- (id)initWithColorName:(NSString *)colorName;
 
 @end

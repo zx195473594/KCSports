@@ -10,6 +10,7 @@
 
 @implementation KCUIFactory
 
+#pragma mark - 创建主题button
 + (KCThemeButton *)createButtonWithImageName:(NSString *)imageName highlightedImageName:(NSString *)highLightedImageName
 {
     KCThemeButton *button = [[KCThemeButton alloc]initWithImage:imageName highlightedImage:highLightedImageName];
@@ -22,4 +23,10 @@
     return button;
 }
 
+#pragma mark - 创建label
++ (KCThemeLabel *)createLabelWithColorName:(NSString *)colorName
+{
+    KCThemeLabel *label = [[KCThemeLabel alloc]initWithColorName:colorName];
+    return label;
+}
 @end
