@@ -11,13 +11,15 @@
 @interface KCThemeButton : UIButton
 
 @property (nonatomic, copy) NSString *imageName;
-@property (nonatomic, copy) NSString *highLightedImageName;
+@property (nonatomic, copy) NSString *selectedImageName;
 
 @property (nonatomic, copy) NSString *BGImageName;
-@property (nonatomic, copy) NSString *BGHighlightedImageName;
+@property (nonatomic, copy) NSString *BGSelectedImageName;
 
-- (id)initWithImage:(NSString *)imageName highlightedImage:(NSString *)highlightedImageName;
+- (id)initWithImage:(NSString *)imageName
+      selectedImage:(NSString *)selectedImageName;
 
-- (id)initWithBGImage:(NSString *)BGImageName BGHighlightedImage:(NSString *)BGHighlightedImageName;
+- (id)initWithBGImage:(NSString *)BGImageName
+      BGSelectedImage:(NSString *)BGSelectedImageName;
 
 @end

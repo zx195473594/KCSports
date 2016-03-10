@@ -19,27 +19,27 @@
     return self;
 }
 
-- (id)initWithImage:(NSString *)imageName highlightedImage:(NSString *)highlightedImageName
+- (id)initWithImage:(NSString *)imageName selectedImage:(NSString *)selectedImageName
 {
     if (self = [self init])
     {
         // 在按钮创建时给属性赋值,以后在主题切换时用
         self.imageName = imageName;
-        self.highLightedImageName = highlightedImageName;
+        self.selectedImageName = selectedImageName;
         
         [self setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-        [self setImage:[UIImage imageNamed:highlightedImageName] forState:UIControlStateHighlighted];
+        [self setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateSelected];
     }
     return self;
 }
 
-- (id)initWithBGImage:(NSString *)BGImageName BGHighlightedImage:(NSString *)BGHighlightedImageName
+- (id)initWithBGImage:(NSString *)BGImageName BGSelectedImage:(NSString *)BGSelectedImageName
 {
     if (self = [self init])
     {
         // 在按钮创建时给属性赋值,以后在主题切换时用
         self.BGImageName = BGImageName;
-        self.BGHighlightedImageName = BGHighlightedImageName;
+        self.BGSelectedImageName = BGSelectedImageName;
     }
     return self;
 }

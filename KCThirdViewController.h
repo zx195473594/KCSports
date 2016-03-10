@@ -11,15 +11,14 @@
 
 @interface KCThirdViewController : KCBaseViewController<MAMapViewDelegate>
 {
-    UIView *_inputView;  // 输入视图
-    UIView *_mapV;    // 地图视图
+    UIView  *_inputView;  // 输入视图
+    UIView  *_mapV;    // 地图视图
     
     MAMapView *_mapView;
     NSMutableArray *_arrayLocations;
     NSArray *_arrayPoly;
     
     UITextField *_txField;
-    int _stepCount;
 
     CLLocation *_lastLocationPoint;  // 上一个定位坐标点
     CLLocation *_newLocationPoint;   // 新获得的定位坐标点

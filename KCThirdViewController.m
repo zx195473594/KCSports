@@ -10,7 +10,7 @@
 
 @interface KCThirdViewController ()
 {
-    NSMutableArray * _speedColors;
+    NSMutableArray  * _speedColors;
     MAMultiPolyline * _polyline;
 }
 @end
@@ -20,8 +20,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    self.title = @"5";
+    self.title = @"3";
     
     [MAMapServices sharedServices].apiKey = @"110b80fe37fa086f33b4a92ae0c78d0e";
     
@@ -49,7 +48,7 @@
     
     // 初始化高德地图
     _mapView = [[MAMapView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, _mapV.height)];
-    _mapView.distanceFilter = 3;
+    _mapView.distanceFilter = 10;
     _mapView.delegate = self;
     _speedColors = [NSMutableArray array];
     
@@ -81,9 +80,6 @@
 // 定位
 - (void)startLocating:(UIButton *)button
 {
-
-    _stepCount = [_txField.text intValue];
-    
     // 开始定位
     _mapView.showsUserLocation = YES;
     _mapView.desiredAccuracy = kCLLocationAccuracyBest;
@@ -116,24 +112,21 @@ updatingLocation:(BOOL)updatingLocation
 {
     float x = userLocation.coordinate.latitude - _lastLocationPoint.coordinate.latitude;
     float y = userLocation.coordinate.longitude - _lastLocationPoint.coordinate.longitude;
-    
-    NSLog(@"x = %f, y = %f",x,y);
+
     // 当取得定位坐标后开始执行
         if(updatingLocation)
     {
-        if (_lastLocationPoint.coordinate.latitude == 0.000000 && _lastLocationPoint.coordinate.longitude == 0.000000) {
+        if (_lastLocationPoint.coordinate.latitude == 0.000000 && _lastLocationPoint.coordinate.longitude == 0.000000)
+        {
             _lastLocationPoint = [userLocation.location copy];
-            
         }
         
         // 判断与前一个点的坐标差，如果超出范围则不进行操作
         if ( (fabsf(x) > 0.00001) || (fabsf(y) > 0.00001))
         {
-            if ((fabsf(x) < 0.000012) || (fabsf(y) < 0.000012)) {
+            if ((fabsf(x) < 0.00002) || (fabsf(y) < 0.00002)) {
                 // 1.将新获得的坐标赋值给_newLocationPoint
-                
                 _newLocationPoint = [userLocation.location copy];
-                
                 
                 NSLog(@"lastLA = %f, lastLO = %f, newLA = %f, newLO = %f",_lastLocationPoint.coordinate.latitude,_lastLocationPoint.coordinate.longitude,_newLocationPoint.coordinate.latitude,_newLocationPoint.coordinate.longitude);
                 // 2.定位获得坐标后开始画线 (从_lastLocationPoint到_newLocationPoint)
@@ -144,7 +137,6 @@ updatingLocation:(BOOL)updatingLocation
                 }
                 // 3.画线完毕后将_newLocationPoint赋值给_lastLocationPoint
                 _lastLocationPoint = _newLocationPoint;
-
             }
            
         }
@@ -176,12 +168,6 @@ updatingLocation:(BOOL)updatingLocation
     [_mapView removeOverlay:overlay];
     if ([overlay isKindOfClass:[MAPolyline class]])
     {
-//        MAPolylineView *polylineView = [[MAPolylineView alloc] initWithPolyline:overlay];
-//        
-//        polylineView.lineWidth = 5.f;
-//        polylineView.strokeColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.6];
-//
-//        return polylineView;
         MAMultiColoredPolylineRenderer * polylineRenderer = [[MAMultiColoredPolylineRenderer alloc] initWithMultiPolyline:overlay];
         
         polylineRenderer.lineWidth = 8.f;
@@ -203,14 +189,10 @@ updatingLocation:(BOOL)updatingLocation
     {
         // 设置精度圈样式
         MAUserLocationRepresentation *pre = [[MAUserLocationRepresentation alloc] init];
-//        pre.fillColor = [UIColor colorWithRed:0.9 green:0.1 blue:0.1 alpha:0.3];
-//        pre.strokeColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.9 alpha:1.0];
         pre.image = [UIImage imageNamed:@"location.png"];
         pre.showsAccuracyRing = NO;
         pre.showsHeadingIndicator = NO;
-        
         [_mapView updateUserLocationRepresentation:pre];
-        
         view.calloutOffset = CGPointMake(0, 0);
     } 
 }
@@ -223,7 +205,6 @@ updatingLocation:(BOOL)updatingLocation
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 

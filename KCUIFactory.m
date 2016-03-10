@@ -11,19 +11,19 @@
 @implementation KCUIFactory
 
 #pragma mark - 创建主题button
-+ (KCThemeButton *)createButtonWithImageName:(NSString *)imageName highlightedImageName:(NSString *)highLightedImageName
++ (KCThemeButton *)createButtonWithImageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName
 {
-    KCThemeButton *button = [[KCThemeButton alloc]initWithImage:imageName highlightedImage:highLightedImageName];
+    KCThemeButton *button = [[KCThemeButton alloc]initWithImage:imageName selectedImage:selectedImageName];
     return button;
 }
 
-+ (KCThemeButton *)createButtonWithBGImageName:(NSString *)BGImageName BGHighlighedImageName:(NSString *)BGHighlighedImageName
++ (KCThemeButton *)createButtonWithBGImageName:(NSString *)BGImageName BGSelectedImageName:(NSString *)BGSelectedImageName
 {
-    KCThemeButton *button = [[KCThemeButton alloc]initWithBGImage:BGImageName BGHighlightedImage:BGHighlighedImageName];
+    KCThemeButton *button = [[KCThemeButton alloc]initWithBGImage:BGImageName BGSelectedImage:BGSelectedImageName];
     return button;
 }
 
-#pragma mark - 创建label
+#pragma mark - 创建主题label
 + (KCThemeLabel *)createLabelWithColorName:(NSString *)colorName
 {
     KCThemeLabel *label = [[KCThemeLabel alloc]initWithColorName:colorName];

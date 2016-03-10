@@ -39,21 +39,21 @@
     self.navigationItem.titleView = self.segmentTitleView;
     
     // 加载左右按钮
-    UIButton *buttonLeftItem = [KCUIFactory createButtonWithImageName:nil highlightedImageName:nil];
+    UIButton *buttonLeftItem = [KCUIFactory createButtonWithImageName:nil selectedImageName:nil];
     buttonLeftItem.tag = 1;
     buttonLeftItem.frame = CGRectMake(0, 0, 30, 30);
     [buttonLeftItem setTitle:@"左1" forState:UIControlStateNormal];
     [buttonLeftItem addTarget:self action:@selector(barButtonItemActions:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:buttonLeftItem];
     
-    UIButton *buttonRightItem1 = [KCUIFactory createButtonWithImageName:nil highlightedImageName:nil];
+    UIButton *buttonRightItem1 = [KCUIFactory createButtonWithImageName:nil selectedImageName:nil];
     buttonRightItem1.tag = 2;
     buttonRightItem1.frame = CGRectMake(0, 0, 30, 30);
     [buttonRightItem1 setTitle:@"右1" forState:UIControlStateNormal];
     [buttonRightItem1 addTarget:self action:@selector(barButtonItemActions:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem1 = [[UIBarButtonItem alloc]initWithCustomView:buttonRightItem1];
 
-    UIButton *buttonRightItem2 = [KCUIFactory createButtonWithImageName:nil highlightedImageName:nil];
+    UIButton *buttonRightItem2 = [KCUIFactory createButtonWithImageName:nil selectedImageName:nil];
     buttonRightItem2.tag = 3;
     buttonRightItem2.frame = CGRectMake(0, 0, 30, 30);
     [buttonRightItem2 setTitle:@"右2" forState:UIControlStateNormal];
@@ -93,7 +93,8 @@
 }
 
 #pragma mark - Memory
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
